@@ -1,3 +1,5 @@
+# 単一責任のクラスを設計する
+
 # Gearクラスは、自転車のギアの特性を表現する
 class Gear
   attr_reader :chainring, :cog, :wheel # chainring, cog, wheelの読み取り専用アクセサを定義
@@ -20,7 +22,7 @@ class Gear
   end
 end
 
-# Wheelクラスは、ホイールの特性を表現します
+# Wheelクラスは、ホイールの特性を表現する。
 class Wheel
   attr_reader :rim, :tire # rimとtireの読み取り専用アクセサを定義
 
