@@ -19,27 +19,6 @@ class Gear
         @wheel ||= Wheel.new(rim, tire)
     end
 end
-# インスタンス変数の作成を分離する
-
-# ex.2
-# 独自に明示的に定義したwheelメソッド内で行うようにする。
-class Gear
-    attr_reader :chainring, :cog, :rim, :tire
-    def initialize(chainring, cog, rim, tire) 
-        @chainring = chainring
-        @cog = cog
-        @rim = rim
-        @tire = tire
-    end
-
-    def gear_inches
-        ratio * wheel.diameter # gear_inchesメソッドが実行されるまでwheelインスタンス生成は延期される
-    end
-
-    def wheel
-        @wheel ||= Wheel.new(rim, tire)
-    end
-end
 
 # -------------------- オブジェクト指向設計ポイント -----------------------
 # 1. 遅延初期化（Lazy Initialization）: wheelメソッドで@wheelインスタンス変数を
