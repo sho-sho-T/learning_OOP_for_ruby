@@ -1,3 +1,5 @@
+# 依存関係を理解する。
+
 class Gear
     attr_reader :chainring, :cog, :rim, :tire
     def initialize(chainring, cog, rim, tire)
