@@ -138,18 +138,83 @@ TripFinderは、安定したパブリックインターフェースを提供し�
 
 
 
-## 良質なインターフェースの実装
+## 一番良い面を（インターフェース）を表に出すコードを書く
 
-1. 明示的なインターフェースの作成
+#### 1. 明示的なインターフェースを作る
 
-   - パブリックメソッドを明確に定義し、ドキュメント化する
+依存できるもの伝えることは、設計者の責任である
+クラスを作る際は、毎回インターフェースを宣言する。「パブリック」インターフェースに含まれるメソッドは次のようであるべき
 
-2. 他のパブリックインターフェースへの敬意
+- 明示的にパブリックインターフェースだと特定できる
+- 「どのように」よりも、「何を」になっている
+- 名前は、考えられる限り、変わりえないものである
+- オプション引数として、ハッシュをとる
 
-   - 他のクラスのパブリックインターフェースを尊重し、不必要な依存を避ける
+```ruby
+class Bicycle
+  # パブリックインターフェースを明示的に定義
+  public
 
-3. プライベートインターフェースへの依存を最小限に
-   - プライベートメソッドへの依存は、変更に弱いコードを生む
+  def initialize(options = {})
+    @size = options[:size]
+    @chain = options[:chain] || default_chain
+    @tire_size = options[:tire_size] || default_tire_size
+  end
+
+  def size
+    @size
+  end
+
+  def spares
+    { chain: @chain, tire_size: @tire_size }
+  end
+
+  # プライベートインターフェース
+  private
+
+  def default_chain
+    '10-speed'
+  end
+
+  def default_tire_size
+    '23'
+  end
+end
+```
+この例では、initialize, size, sparesがパブリックインターフェースとして明示的に定義されている。これらのメソッドは「何を」するかを表現しており、実装の詳細（「どのように」）は隠蔽されている。
+
+#### 2. 他のパブリックインターフェースへの敬意
+
+他のクラスと協力する際は、それらのパブリックインターフェースのみを使ってベストを尽くす。
+```ruby
+class Trip
+  def prepare(preparer)
+    # preparerのパブリックインターフェースのみを使用
+    preparer.prepare_trip(self)
+  end
+end
+
+class TripCoordinator
+  def prepare_trip(trip)
+    # Tripクラスのパブリックインターフェースを通じて情報を取得
+    buy_food(trip.customers)
+  end
+
+  private
+
+  def buy_food(customers)
+    # 食事の準備ロジック
+  end
+end
+```
+
+#### 3. プライベートインターフェースに依存する時は、注意深く
+プライベートメソッドへの依存は、変更に弱いコードを生む
+
+#### 4. コンテキストを最小限にする
+パブリックメソッドを作る際は、メッセージの送り手が、クラスがどのようにその振る舞いを実装しているかを知ることなく、求めているものを得られるように作る。
+
+パブリックインターフェースを全く持たない、もしくは定義がひどいクラスに遭遇したら、自身の手でパブリックインターフェースを作る。新しくラッパーメソッドを定義することも。
 
 ## デメテルの法則
 
@@ -173,7 +238,85 @@ TripFinderは、安定したパブリックインターフェースを提供し�
 2. 適切な責任の分配
    - 必要な情報を持つオブジェクトに適切なメソッドを配置
 
+#### メッセージの委譲とラッパーメソッド
+メッセージの委譲は、あるオブジェクトが受け取ったメッセージを、適切な他のオブジェクトに転送することを指す。ラッパーメソッドは、この委譲を実現するための手段の一つ。
+
+基本的な考え方
+
+オブジェクトAがオブジェクトBを知っている。
+オブジェクトBがオブジェクトCを知っている。
+オブジェクトAがCの機能を使いたい場合、直接C.method()と呼ぶのではなく、B.wrapper_method()を通じてアクセスする。
+
+例：メソッドチェーンの問題
+```ruby
+class Person
+  attr_reader :address
+  def initialize(address)
+    @address = address
+  end
+end
+
+class Address
+  attr_reader :street
+  def initialize(street)
+    @street = street
+  end
+end
+
+class Street
+  attr_reader :name
+  def initialize(name)
+    @name = name
+  end
+end
+
+# デメテルの法則に違反する使用例
+person = Person.new(Address.new(Street.new("Main St.")))
+puts person.address.street.name  # => "Main St."
+```
+
+例：ラッパーメソッドを使用して、この問題を解決
+```ruby
+class Person
+  attr_reader :address
+  def initialize(address)
+    @address = address
+  end
+
+  # ラッパーメソッド
+  def street_name
+    address.street_name
+  end
+end
+
+class Address
+  attr_reader :street
+  def initialize(street)
+    @street = street
+  end
+
+  # ラッパーメソッド
+  def street_name
+    street.name
+  end
+end
+
+class Street
+  attr_reader :name
+  def initialize(name)
+    @name = name
+  end
+end
+
+# 改善された使用例
+person = Person.new(Address.new(Street.new("Main St.")))
+puts person.street_name  # => "Main St."
+```
+
+
 ## まとめ
 
 柔軟なインターフェースの設計は、シーケンス図などのツールを活用し、適切な設計原則に従うことで達成できる。デメテルの法則を意識し、オブジェクト間の不必要な結合を避けることで、保守性と拡張性の高いコードを書くことができる。
-```
+
+オブジェクト指向アプリケーションは、オブジェクト間で交わされるメッセージによって定義される
+このメッセージ交換は「パブリック」インターフェースに沿って行われる。適切に定義されたインターフェースは、根底にあるクラスの責任をあらわにし、最大限の利益を最小限のコストで提供する安定したメソッドから成る。
