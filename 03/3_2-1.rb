@@ -1,20 +1,21 @@
 # インスタンス変数の作成を分離する
 
-# ex.1 
+# ex.1
 # Wheelの新しいインスタンス作成を、Gearのgear_inchesメソッドからinitializeメソッドに移す
 
 class Gear
-    attr_reader :chainring, :cog, :rim, :tire
-    def initialize(chainring, cog, rim, tire) # 依存はinitializeメソッドにて公開
-        @chainring = chainring
-        @cog = cog
-        @wheel = Wheel.new(rim, tire) #Gearが作られる時に無条件でWheelも作られる
-    end
+  attr_reader :chainring, :cog, :rim, :tire
 
-    def gear_inches
-        ratio * wheel.diameter
-    end
-    #....
+  def initialize(chainring, cog, rim, tire) # 依存はinitializeメソッドにて公開
+    @chainring = chainring
+    @cog = cog
+    @wheel = Wheel.new(rim, tire) # Gearが作られる時に無条件でWheelも作られる
+  end
+
+  def gear_inches
+    ratio * wheel.diameter
+  end
+  # ....
 end
 
 # -------------------- オブジェクト指向設計ポイント -----------------------

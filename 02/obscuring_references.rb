@@ -1,24 +1,26 @@
 class ObscuringReferences
-# attr_reader :wheels はカプセル化を適用しているが、
-# 内部データ構造（Wheelオブジェクトの配列）を完全には隠蔽していない。
-# クラスの利用者が内部表現に依存する可能性がある。
-    attr_reader :wheels
+  # attr_reader :wheels はカプセル化を適用しているが、
+  # 内部データ構造（Wheelオブジェクトの配列）を完全には隠蔽していない。
+  # クラスの利用者が内部表現に依存する可能性がある。
+  attr_reader :wheels
 
-    def initialize(data)
-        @wheels = wheelify(data)
-    end
+  def initialize(data)
+    @wheels = wheelify(data)
+  end
 
-    def diameters
-        wheels.collect{|wheel|
-            wheel.rim + (wheel.tire * 2)}
+  def diameters
+    wheels.collect do |wheel|
+      wheel.rim + (wheel.tire * 2)
     end
+  end
 
-    # これで誰でもwheelにrim/tireを送れる
-    Wheel = Struct.new(:rim, :tire)
-    def wheelify(data)
-        data.collect {|cell|
-            Wheel.new(cell[0], cell[1])}
+  # これで誰でもwheelにrim/tireを送れる
+  Wheel = Struct.new(:rim, :tire)
+  def wheelify(data)
+    data.collect do |cell|
+      Wheel.new(cell[0], cell[1])
     end
+  end
 end
 
 # 使用例

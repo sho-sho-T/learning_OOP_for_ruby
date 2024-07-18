@@ -2,20 +2,21 @@
 
 # 初期化の際の引数にハッシュを使う
 class Gear
-    attr_reader :chainring, :cog, :wheel
-    def initialize(args)
-        @chainring = args[:chainring]
-        @cog = args[:cog]
-        @wheel = args[:wheel]
-    end
-# .....
+  attr_reader :chainring, :cog, :wheel
 
+  def initialize(args)
+    @chainring = args[:chainring]
+    @cog = args[:cog]
+    @wheel = args[:wheel]
+  end
+  # .....
 end
 
 Gear.new(
-    :chainring => 52,
-    :cog => 11,
-    :wheel => Wheel.new(26, 1.5)).gear_inches
+  chainring: 52,
+  cog: 11,
+  wheel: Wheel.new(26, 1.5)
+).gear_inches
 
 # -------------------- オブジェクト指向設計ポイント -----------------------
 # 1. 引数の順番に依存しない初期化: ハッシュを使用することで、

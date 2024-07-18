@@ -1,5 +1,5 @@
 class Bicycle
-  attr_reader :style, :size, :tape_color :front_shock, :rear_shock
+  attr_reader :style, :size, :tape_color, :front_shock, :rear_shock
 
   def initialize(args)
     @style = args[:style]
@@ -12,9 +12,9 @@ class Bicycle
   # "style"の確認は、危険な道へ進む一歩
   def spares
     if style == :road
-      {chain: '10-speed', tire_size: '23', tape_color: tape_color}
+      { chain: '10-speed', tire_size: '23', tape_color: tape_color }
     else
-      {chain: '10-speed', tire_size: '2.1', rear_shock: rear_shock}
+      { chain: '10-speed', tire_size: '2.1', rear_shock: rear_shock }
     end
   end
 end

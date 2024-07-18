@@ -3,18 +3,18 @@ class Trip
   attr_reader :bicycles, :customers, :vehicle
 
   def prepare(preparers)
-    preparers.each {|preparer|
+    preparers.each do |preparer|
       preparer.prepare_trip(self)
-    }
+    end
   end
 end
 
 # 全ての準備者(Preparer)は 'prepare_trip'に応答するダック
 class Mechanic
   def prepare_trip(trip)
-    trip.bicycles.each {|bicycle|
+    trip.bicycles.each do |bicycle|
       prepare_bicycle(bicycle)
-    }
+    end
   end
   # ......
 end
@@ -104,7 +104,6 @@ trip.prepare([mechanic, coordinator, driver])
 #   Mechanic, TripCoordinator, Driver など、異なるクラスのオブジェクトが preparers 配列に含まれていても問題ない
 # 振る舞いに基づく処理:
 #   オブジェクトの型ではなく、prepare_trip メソッドを持つという振る舞いに基づいて処理している
-
 
 # mechanic, coordinator, driverは異なるクラスのインスタンスだが、全てがprepare_tripメソッドを実装しているため、
 # Tripクラスは型を気にすることなく、これらのオブジェクトを同じように扱える

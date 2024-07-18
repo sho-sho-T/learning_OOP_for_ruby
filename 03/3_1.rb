@@ -1,19 +1,20 @@
 # 依存関係を理解する。
 
 class Gear
-    attr_reader :chainring, :cog, :rim, :tire
-    def initialize(chainring, cog, rim, tire)
-        @chainring = chainring
-        @cog = cog
-        @rim = rim
-        @tire = tire
-    end
-    
-    def gear_inches
-        ratio * Wheel.new(rim, tire).diameter # Wheelに依存している（Wheelクラスの名前変更などあった場合にめんどくさい）
-    end
-        
-    # .....
+  attr_reader :chainring, :cog, :rim, :tire
+
+  def initialize(chainring, cog, rim, tire)
+    @chainring = chainring
+    @cog = cog
+    @rim = rim
+    @tire = tire
+  end
+
+  def gear_inches
+    ratio * Wheel.new(rim, tire).diameter # Wheelに依存している（Wheelクラスの名前変更などあった場合にめんどくさい）
+  end
+
+  # .....
 end
 
 # -------------------- オブジェクト指向設計ポイント -----------------------

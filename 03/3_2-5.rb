@@ -4,33 +4,34 @@
 
 # ------------ 外部フレームワーク ----------------------
 module SomeFramework
-    class Gear
-        attr_reader :chainring, :cog, :wheel
-        def initialize(chainring, cog, wheel)
-            @chainring = chainring
-            @cog = cog
-            @wheel = wheel
-        end
-    # ...
+  class Gear
+    attr_reader :chainring, :cog, :wheel
+
+    def initialize(chainring, cog, wheel)
+      @chainring = chainring
+      @cog = cog
+      @wheel = wheel
     end
+    # ...
+  end
 end
 # --------------------------------------------------
 
 # 外部のインターフェースラップし、自身を変更から守る
 module GearWrapper # ←責任：SomeFramework::Gearのインスタンスを作成すること
-    def self.gear(args)
-        SomeFramework::Gear,new(args[:chainring],
-                                args[:cog],
-                                args[:wheel])
-    end
+  def self.gear(args)
+    SomeFramework::Gear.new(args[:chainring],
+                            args[:cog],
+                            args[:wheel])
+  end
 end
 
 # 引数を持つハッシュを渡すことでGearのインスタンスを作成できるようなった
 GearWrapper.gear(
-    :chainring => 52,
-    :cog => 11,
-    :wheel => Wheel.new(26, 1.5)).gear_inches
-
+  chainring: 52,
+  cog: 11,
+  wheel: Wheel.new(26, 1.5)
+).gear_inches
 
 # -------------------- オブジェクト指向設計ポイント -----------------------
 # 1. 依存関係の管理: GearWrapperモジュールが外部フレームワークとの

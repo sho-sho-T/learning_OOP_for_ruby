@@ -6,28 +6,29 @@
 # 外部的な依存を取り除き、専用のメソッド内にカプセル化する
 # ↑「メッセージ」への参照がクラスに埋め込まれていて、さらに、そのメッセージが変わる可能性が高い時に必要なテクニック
 class Gear
-    attr_reader :chainring, :cog, :rim, :tire
-    def initialize(chainring, cog, rim, tire) 
-        @chainring = chainring
-        @cog = cog
-        @rim = rim
-        @tire = tire
-    end
+  attr_reader :chainring, :cog, :rim, :tire
 
-    def gear_inches
-        # ...恐ろしい計算が何行かある
-        foo = some_intermediate_result * diameter
-        # ...恐ろしい計算がさらに何行かある
-    end
+  def initialize(chainring, cog, rim, tire)
+    @chainring = chainring
+    @cog = cog
+    @rim = rim
+    @tire = tire
+  end
 
-    def wheel
-        @wheel ||= Wheel.new(rim, tire)
-    end
+  def gear_inches
+    # ...恐ろしい計算が何行かある
+    foo = some_intermediate_result * diameter
+    # ...恐ろしい計算がさらに何行かある
+  end
 
-    # 外部的な依存を取り除き、専用のメソッド内にカプセル化する。
-    def diameter
-        wheel.diameter
-    end
+  def wheel
+    @wheel ||= Wheel.new(rim, tire)
+  end
+
+  # 外部的な依存を取り除き、専用のメソッド内にカプセル化する。
+  def diameter
+    wheel.diameter
+  end
 end
 
 # -------------------- オブジェクト指向設計ポイント -----------------------

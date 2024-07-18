@@ -1,5 +1,5 @@
 class Trip
-  def initialize(bicycles)  
+  def initialize(bicycles)
     @bicycles = bicycles
   end
 
@@ -11,7 +11,7 @@ class Trip
 end
 
 class Mechanic
-  def prepare_trip(trip) 
+  def prepare_trip(trip)
     # MechanicはTripオブジェクトから必要な情報を取得する
     trip.bicycles.each { |bicycle| erepare_bicycle(bicycle) }
   end

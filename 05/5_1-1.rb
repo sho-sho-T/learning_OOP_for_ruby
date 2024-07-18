@@ -3,7 +3,7 @@ class Trip
   attr_reader :bicycles, :customers, :vehicle
 
   def prepare(preparers)
-    preparers.each {|preparer|
+    preparers.each do |preparer|
       case preparer
       when Mechanic
         preparer.prepare_bicycles(bicycles)
@@ -13,7 +13,7 @@ class Trip
         preparer.gas_up(vehicle)
         preparer.fill_water_tank(vehicle)
       end
-    }
+    end
   end
 end
 
