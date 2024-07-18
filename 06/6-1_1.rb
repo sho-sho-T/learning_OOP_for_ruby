@@ -1,3 +1,4 @@
+# 軽くてドロップバーで、細いタイヤのロードバイク
 
 class Bisycle
   attr_reader :size, :tape_color
